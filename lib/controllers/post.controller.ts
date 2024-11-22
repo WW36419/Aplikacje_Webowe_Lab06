@@ -14,10 +14,10 @@ class PostController implements Controller {
    private initializeRoutes() {
        this.router.get(`${this.path}s`, this.getAll);
        this.router.get(`${this.path}/:id`, this.getOne);
+       this.router.get(`${this.path}/:num`, this.getMul);
 
        this.router.post(`${this.path}`, this.addData);
        this.router.post(`${this.path}/:id`, this.spliceData);
-       this.router.post(`${this.path}/:num`, this.addMulData);
 
        this.router.delete(`${this.path}s`, this.delAll);
        this.router.delete(`${this.path}/:id`, this.delOne);
@@ -33,19 +33,17 @@ class PostController implements Controller {
        response.status(200).json(testArr[parseInt(id)]);
    };
 
+   private getMul = async (request: Request, response: Response, next: NextFunction) => {
+       const { num } = request.params;
+       const data = testArr.slice(0, parseInt(num)-1)
+
+       response.status(200).json(data);
+   };
+
 
    private addData = async (request: Request, response: Response, next: NextFunction) => {
        const { elem } = request.body;
        testArr.push(elem);
-
-       response.status(200).json(testArr);
-   };
-
-   private addMulData = async (request: Request, response: Response, next: NextFunction) => {
-       const { elem } = request.body;
-       const { num } = request.params;
-       for (let i=0; i<parseInt(num); i++)
-        testArr.push(elem[i]);
 
        response.status(200).json(testArr);
    };
